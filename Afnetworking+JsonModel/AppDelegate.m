@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <AFNetworking.h>
 
 @interface AppDelegate ()
 
@@ -17,6 +18,32 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    [manager startMonitoring];
+    [manager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        switch (status) {
+            case AFNetworkReachabilityStatusUnknown:
+            {
+                NSLog(@"未知网络");
+            }
+                break;
+            case AFNetworkReachabilityStatusNotReachable:
+            {
+                NSLog(@"无法联网");
+            }
+                break;
+                
+            case AFNetworkReachabilityStatusReachableViaWWAN:
+            {
+                NSLog(@"当前使用的是2g/3g/4g网络");
+            }
+                break;
+            case AFNetworkReachabilityStatusReachableViaWiFi:
+            {
+                NSLog(@"当前在WIFI网络下");
+            }
+        }
+    }];
     return YES;
 }
 
